@@ -1,3 +1,4 @@
+const { error } = require("console");
 const express =require("express");//1
 const fs=require("fs");//5
 const app=express()//2
@@ -9,7 +10,7 @@ const port=8000 //3
 
 const products=JSON.parse((fs.readFileSync("dummy.json"))).products;//9
 
-console.log(products);//10
+// console.log(products);//10
 app.use(express.json());//11
 
 
@@ -26,10 +27,51 @@ app.post("/products",((req,res)=>{//7:
 }))
 
 //HTTP put method
-app.put("/products/:id",((req,res)=>{
-    
+app.patch("/products/:id",((req,res)=>{//12
+    const id=Number(req.params.id)//13
+    const productIndex=products.findIndex(p=>p.id === id)
+
+    if(productIndex === -1){
+        return res.status(404).json({error:"Product not found"})
+    }
+    const updatedProduct=req.body;
+    const product=products[productIndex]
+
+    products.splice(productIndex,1,{...product,...updatedProduct})
+
+    res.status(201).json(products[productIndex])
 }))
 
+
+//HTTP patch method
+app.put("/products/:id",((req,res)=>{//14
+    const id=Number(req.params.id)
+    const productIndex=products.findIndex(p=>p.id === id)
+
+    if(productIndex === -1){
+        return res.status(404).json({error:"Product not found"})
+    }
+    const updatedProduct=req.body;
+
+    products[productIndex] = { ...updatedProduct, id: id };
+
+    res.status(201).json(products[productIndex])
+}))
+
+//HTTP delete method
+
+app.delete("/products/:id",(req,res)=>{//15
+    const id=Number(req.params.id)
+    const productIndex=products.findIndex(p=>p.id === id)
+
+    if(productIndex === -1){
+        return res.status(404).json({error:"Product not found"})
+    }
+    products.splice(productIndex,1)
+
+    res.status(200).json({message:"Product deleted."})
+
+})
 
 
 

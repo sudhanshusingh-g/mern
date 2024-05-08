@@ -1,5 +1,16 @@
 {
   "dependencies": {
-    "express": "^4.19.2"
-  }
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  },
+  "name": "expressjs",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "server": "nodemon server.js"
+  },
+  "author": "Sudhanshu Singh",
+  "license": "ISC",
+  "description": ""
 }
